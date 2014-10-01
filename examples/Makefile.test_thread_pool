@@ -1,0 +1,25 @@
+vpath %.cpp ../src/thread
+vpath %.cpp ../src/base
+vpath %.cpp ../src/util
+vpath %.h ../src/thread
+vpath %.h ../src/base
+vpath %.h ../src/util
+vpath %.h ../src/include
+
+INCLUDES = -I../src/include/ -I../src/util/ -I../src/thread/ -I../src/base/
+
+CC = g++
+FLAGS = -lpthread
+
+OBJS = test_thread_pool.o runner.o thread.o thread_pool.o log.o mutex_lock.o mutex_guard.o
+
+main:$(OBJS)
+	$(CC) -o $@ $^ -Wall $(FLAGS)
+
+$(OBJS):%.o:%.cpp
+	$(CC) -g -c $< $(INCLUDES)	
+	
+.PHONY:clean
+clean:
+	-rm -f $(OBJS) main
+	

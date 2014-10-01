@@ -1,0 +1,14 @@
+vpath %.cpp ../src/util
+vpath %.h ../src/util
+
+CC = g++
+OBJS = test_log.o log.o
+INCLUDES = -I../src/util
+main:$(OBJS)
+	$(CC) -o $@ $^ -Wall
+$(OBJS):%.o:%.cpp
+	$(CC) -g -c $< $(INCLUDES)
+.PHONY:clean
+clean:
+	-rm -f $(OBJS) main
+	

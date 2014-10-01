@@ -1,0 +1,14 @@
+vpath %.cpp ../src/util
+vpath %.h ../src/util
+
+CC = g++
+INCLUDES = -I../src/util
+OBJS = test_mem_list.o memory_list.o log.o
+main:$(OBJS)
+	$(CC) -o $@ $^
+
+$(OBJS):%.o:%.cpp
+	$(CC) -c $< -g $(INCLUDES) -D DEBUG
+.PHONY:clean
+clean:
+	-rm -f *.o main 

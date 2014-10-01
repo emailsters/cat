@@ -1,0 +1,13 @@
+vpath %.cpp ../src/util
+vpath %.h ../src/include
+
+CC = g++
+INCLUDES = -I../src/include -I../src/util
+OBJS = test_memory_manager.o memory_manager.o memory_list.o log.o
+main:$(OBJS)
+	$(CC) -o $@ $^
+$(OBJS):%.o:%.cpp
+	$(CC) -c $< -g $(INCLUDES)
+.PHONY:clean
+clean:
+	-rm -f *.o main
