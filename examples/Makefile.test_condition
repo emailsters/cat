@@ -11,8 +11,7 @@ INCLUDES = -I../src/include/ -I../src/util/ -I../src/thread/ -I../src/base
 CC = g++
 FLAGS = -lpthread
 
-OBJS = test_condition.o runner.o thread.o \
-log.o mutex_lock.o mutex_guard.o condition.o
+OBJS = test_condition.o thread.o log.o mutex_lock.o mutex_guard.o condition.o
 
 main:$(OBJS)
 	$(CC) -o $@ $^ -Wall $(FLAGS)

@@ -1,7 +1,7 @@
 #include "log.h"
 #include "memory_list.h"
 #include "memory_manager.h"
-#include "types.h"
+#include "memory_allocate.h"
 
 typedef struct Hello{
     int a;
