@@ -3,9 +3,9 @@
 
 class Runner{
 public:
-    Runner();
+    Runner(){}
     
-    virtual ~Runner();
+    virtual ~Runner(){}
 
     virtual void svc() = 0;
 };

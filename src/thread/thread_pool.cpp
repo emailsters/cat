@@ -9,19 +9,18 @@
 #define MAX_TASK_QUEUE_SIZE 6556
 #define MAX_THREAD_COUNT 256
 
-ThreadPool::ThreadPool(string name):_running(false){
+ThreadPool::ThreadPool(string name):_running(false), _condition(&_mutex){
     if(name == "")
         _pool_name = THREAD_POOL_NAME_DEFAULT;
     else
         _pool_name = name;
 
-    clear_task_queue();
-    clear_threads();
+    _task_queue.clear();
+    _threads.clear();
 }
 
 ThreadPool::~ThreadPool(){
-    clear_task_queue();
-    clear_threads();
+    _task_queue.clear();
 }
 
 int ThreadPool::start(int thread_count){
@@ -43,19 +42,26 @@ int ThreadPool::start(int thread_count){
 }
 
 void ThreadPool::stop(){
-    _running = false;
+    {
+        MUTEX_GUARD_RETURN(&_mutex);
+        Log::i(LOG_THREAD_POOL, "stop thread pool");
+        _running = false;
+        _condition.notify_all();
+    }
+    clear_threads();
+    
+    Log::i(LOG_THREAD_POOL, "stop thread pool end");
 }
 
 void ThreadPool::svc(){
     while(_running){
-        //Log::i(LOG_THREAD_POOL, "in thread pool svc");
         sleep(1);
         Runner *task = take();
         if(task){
-            //Log::i(LOG_THREAD_POOL, "run task");
             task->svc();
-            delete task;
-        }        
+            //task由外部释放
+            //delete task;
+        }
     }
 }
 
@@ -69,8 +75,10 @@ bool ThreadPool::push_task(Runner *task){
         _task_queue.push_back(task);
     }else{
         Log::i(LOG_THREAD_POOL, "task is already running");
+        return false;
     }
-    // need to notify threads
+    Log::i(LOG_THREAD_POOL, "push task, notify all");
+    _condition.notify_all();
     return true;
 }
 
@@ -87,16 +95,20 @@ bool ThreadPool::check_task(Runner *task){
 
 Runner* ThreadPool::take(){
     MUTEX_GUARD_RETURN(&_mutex);
-    //Log::i(LOG_THREAD_POOL, "take task");
-    Runner *task;
-    if(_task_queue.empty()){
-        return NULL;
+    Runner *task = NULL;
+    while(_task_queue.empty() && _running){
+        Log::i(LOG_THREAD_POOL, "queue is empty waiting");
+        _condition.wait();
     }
-    task = _task_queue.front();
-    _task_queue.pop_front();
+    if(!_task_queue.empty()){
+        Log::i(LOG_THREAD_POOL, "take task");
+        task = _task_queue.front();
+        _task_queue.pop_front();
+    }
     return task;
 }
 
+/* task应该由外部进行释放
 void ThreadPool::clear_task_queue(){
     //Log::i(LOG_THREAD_POOL, "task queue size:%d", _task_queue.size());
     while(!_task_queue.empty()){
@@ -104,6 +116,7 @@ void ThreadPool::clear_task_queue(){
         _task_queue.pop_front();
     }    
 }
+*/
 
 void ThreadPool::clear_threads(){
     vector<Thread*>::iterator itor = _threads.begin();

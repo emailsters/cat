@@ -1,5 +1,4 @@
 #include "thread_mgr.h"
-#include "types.h"
 #include "monitor_thread.h"
 #include <iostream>
 #include "log.h"
@@ -29,7 +28,7 @@ ThreadMgr::~ThreadMgr()
 int ThreadMgr::regist(MonThread *thread)
 {
     _thread_list.push_back(thread);
-    return RET_OK;
+    return 0;
 }
 
 /*
@@ -51,12 +50,12 @@ int ThreadMgr::unregist(MonThread *thread){
     while(itor != _thread_list.end()){
         if((*itor) == thread){
             _thread_list.erase(itor);
-            return RET_OK;
+            return 0;
         }
         ++itor;
     }
     Log::i(LOG_THREAD_MGR, "can not find thread");
-    return RET_ERR;
+    return -1;
 }
 
 void ThreadMgr::clear(){

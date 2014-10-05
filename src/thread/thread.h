@@ -7,6 +7,12 @@ struct HookParam;
 
 typedef struct HookParam hook_param_t;
 
+/*
+  *使用thread有两种方式
+  *一种是继承thread，重写svc方法
+  *另一种是实现runner接口，创建thread的时候传入
+*/
+
 class Thread{
 public:
     Thread();

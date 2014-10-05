@@ -13,25 +13,23 @@ struct HookParam{
 void *hook(void *args){
     if(args == NULL)
         return NULL;
-    hook_param_t *param = reinterpret_cast<hook_param_t*>(args);
+    hook_param_t *param = static_cast<hook_param_t*>(args);
     bool has_runner = param->has_runner;
     void *func = param->hook_ptr;
     if(has_runner){
-        //Log::i(THREAD_LOG, "has not runner");
-        reinterpret_cast<Thread*>(func)->svc();
+        static_cast<Thread*>(func)->svc();
     }else{
-        //Log::i(THREAD_LOG, "has runner");
-        reinterpret_cast<Runner*>(func)->svc();
+        static_cast<Runner*>(func)->svc();
     }
     return NULL;
 }
 
-Thread::Thread():_runner(NULL){
+Thread::Thread():_runner(NULL), _started(false), _thread_id(0){
     _hook_param = new hook_param_t;
 }
 
-Thread::Thread(Runner *runner):_started(false){
-    _runner = runner;
+Thread::Thread(Runner *runner):_runner(runner), _started(false), 
+    _thread_id(0){
     _hook_param = new hook_param_t;
 }
 
@@ -68,6 +66,7 @@ void Thread::start(){
         _hook_param->hook_ptr = this;
     }
     err = pthread_create(&_thread_id, NULL, hook, _hook_param);
+    Log::i(THREAD_LOG, "create thread %d", _thread_id);
     if(err != 0){
         Log::i(THREAD_LOG, "create thread failed");
         return;
@@ -84,9 +83,13 @@ pthread_t Thread::get_thread_id(){
 }
 
 void Thread::join(){
+    if(_thread_id == 0){
+        Log::i(THREAD_LOG, "no thread to join");
+        return;
+    }
     int err = pthread_join(_thread_id, NULL);
     if(err != 0){
-        Log::i(THREAD_LOG, "thread join failed");
+        Log::i(THREAD_LOG, "thread %d join failed, return code:%d", _thread_id, err);
     }
 }
 

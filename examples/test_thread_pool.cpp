@@ -3,78 +3,74 @@
 #include "log.h"
 #include <unistd.h>
 
-class MyTask1 : public Runner{
+class MyTask : public Runner{
 public:
-    void svc(){
-        int i = 0;
-        while(i < 20){
-            sleep(2);
-            Log::i("MyTask 1", "MyTask 1");
-            ++i;
-        }        
-    }
-};
-
-class MyTask2 : public Runner{
-public:
-    void svc(){
-        int i = 0;
-        while(i < 3){
-            sleep(3);
-            Log::i("MyTask 2", "MyTask 2");
-            ++i;
-        }
-    }
-};
-
-class MyTask3 : public Runner{
-public:
+    MyTask(string name):_name(name){}
+    
     void svc(){
         int i = 0;
         while(i < 3){
             sleep(1);
-            Log::i("MyTask 3", "MyTask 3");
+            Log::i("Task", _name.c_str());
             ++i;
-        }
+        }        
     }
+    
+private:
+    string _name;
 };
 
-class MyTask4 : public Runner{
+class MyTask2 : public Runner{
 public:
+    MyTask2(string name):_name(name){}
+    
     void svc(){
         int i = 0;
         while(i < 3){
             sleep(2);
-            Log::i("MyTask 4", "MyTask 4");
+            Log::i("Task", _name.c_str());
             ++i;
-        }
+        }        
     }
+    
+private:
+    string _name;
 };
 
 
 int main(){
+    
     ThreadPool *tp = new ThreadPool("thead pool");
-    tp->start(2);
-    Runner *task1 = new MyTask1;
-    Runner *task2 = new MyTask2;
-    Runner *task3 = new MyTask3;
-    Runner *task4 = new MyTask4;
+    tp->start(3);
+    Runner *task1 = new MyTask("task 1");
+    //Runner *task2 = new MyTask("task 2");
+    Runner *task3 = new MyTask("task 3");
+    Runner *task4 = new MyTask("task 4");
+    Runner *task5 = new MyTask("task 5");
+    Runner *task6 = new MyTask("task 6");
+    Runner *task2 = new MyTask2("task 7");
+    
     tp->push_task(task1);
-    Log::i("main", "1 task in queue:%d", tp->tasks_in_queue());
+
     tp->push_task(task2);
-    Log::i("main", "2 task in queue:%d", tp->tasks_in_queue());
+
+    sleep(5);
+    
     tp->push_task(task3);
-    Log::i("main", "3 task in queue:%d", tp->tasks_in_queue());
+    sleep(5);
     tp->push_task(task4);
-    Log::i("main", "4 task in queue:%d", tp->tasks_in_queue());
-    sleep(10);
-    Log::i("main", "5 task in queue:%d", tp->tasks_in_queue());
-    sleep(30);
-    Log::i("main", "6 task in queue:%d", tp->tasks_in_queue());
-    sleep(100);
-    Log::i("main", "7 task in queue:%d", tp->tasks_in_queue());
-    tp->stop();
-    delete tp; //释放资源会等待线程执行完毕，如果Runner类的svc方法是死循环，这里会导致线程挂死
+    sleep(6);
+    Log::i("main", "task in queue:%d", tp->tasks_in_queue());
+    tp->push_task(task5);
+    tp->push_task(task6);
+    //tp->push_task(task7);
+
+    Log::i("main", "task in queue:%d", tp->tasks_in_queue());
+
+    //sleep(30);
+    tp->stop(); //释放资源会等待线程执行完毕，如果Runner类的svc方法是死循环，这里会导致线程挂死
+    delete tp; 
+    Log::i("main", "end");
     return 0;
 }
 

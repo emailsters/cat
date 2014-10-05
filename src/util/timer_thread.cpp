@@ -31,7 +31,7 @@ int CTimerThread::set_timer(int interval){
 void* CTimerThread::hook(void *args){
     while(_not_exit){
         sleep(_interval);
-        reinterpret_cast<CTimerThread*>(args)->on_timer();
+        static_cast<CTimerThread*>(args)->on_timer();
     }
 }
 

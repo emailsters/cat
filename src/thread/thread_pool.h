@@ -6,6 +6,7 @@
 #include "runner.h"
 #include "thread.h"
 #include "mutex_lock.h"
+#include "condition.h"
 
 using namespace std;
 
@@ -27,8 +28,9 @@ public:
     int tasks_in_queue() const;
 
 private:
-    void clear_task_queue();
+    // void clear_task_queue();
 
+    //所有线程执行完毕才会结束
     void clear_threads();
 
     Runner* take();
@@ -42,8 +44,9 @@ private:
     
     list<Runner*> _task_queue;
     
-    //pthread_mutex_t _mutex;
     MutexLock _mutex;
+
+    Condition _condition;
 
     bool _running;
 

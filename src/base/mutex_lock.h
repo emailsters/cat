@@ -11,6 +11,8 @@ public:
 
     void unlock();
 
+    pthread_mutex_t *get_mutex();
+
 private:
     MutexLock(const MutexLock &mutex_lock){}
     MutexLock operator=(const MutexLock &mutex_lock){}

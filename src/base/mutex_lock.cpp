@@ -32,3 +32,7 @@ void MutexLock::unlock(){
     }
 }
 
+pthread_mutex_t *MutexLock::get_mutex(){
+    return &_mutex;
+}
+

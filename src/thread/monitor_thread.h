@@ -3,6 +3,7 @@
 #include <pthread.h>
 #include "runner.h"
 #include "thread.h"
+#include "mutex_lock.h"
 
 #define SHAKE 1
 #define UNSHAKE 0
@@ -30,7 +31,7 @@ protected:
 private:
     bool _not_exit;
 
-    pthread_mutex_t _mutex;
+    MutexLock _mutex;
     
     int _missed_hands;
 };
