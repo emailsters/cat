@@ -6,6 +6,7 @@
 #define LOG_THREAD_MGR "ThreadMgr"
 
 ThreadMgr* ThreadMgr::_thread_mgr = NULL;
+MutexLock ThreadMgr::_mutex;
 
 ThreadMgr::ThreadMgr(){
     set_timer(1);
@@ -13,9 +14,11 @@ ThreadMgr::ThreadMgr(){
 
 ThreadMgr* ThreadMgr::instance()
 {
+	_mutex.lock();
     if(NULL == _thread_mgr){
         _thread_mgr = new ThreadMgr;
     }
+	_mutex.unlock();
     return _thread_mgr;
 }
 
@@ -27,7 +30,9 @@ ThreadMgr::~ThreadMgr()
 
 int ThreadMgr::regist(MonThread *thread)
 {
+	_mutex.lock();
     _thread_list.push_back(thread);
+	_mutex.unlock();
     return 0;
 }
 
@@ -42,23 +47,28 @@ int ThreadMgr::pop(MonThread *thread)
 */
 
 int ThreadMgr::unregist(MonThread *thread){
+	_mutex.lock();
     if(_thread_list.empty()){
         Log::i(LOG_THREAD_MGR, "list is emtpy");
+		_mutex.unlock();
         return false;
     }
     list<MonThread*>::iterator itor = _thread_list.begin();
     while(itor != _thread_list.end()){
         if((*itor) == thread){
             _thread_list.erase(itor);
+			_mutex.unlock();
             return 0;
         }
         ++itor;
     }
     Log::i(LOG_THREAD_MGR, "can not find thread");
+	_mutex.unlock();
     return -1;
 }
 
 void ThreadMgr::clear(){
+	_mutex.lock();
     std::list<MonThread*>::iterator itor = _thread_list.begin();
     while(itor != _thread_list.end()){
         (*itor)->stop();
@@ -66,6 +76,7 @@ void ThreadMgr::clear(){
         ++itor;
     }
     _thread_list.clear();
+	_mutex.unlock();
 }
 
 void ThreadMgr::on_timer(){

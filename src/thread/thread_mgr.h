@@ -4,6 +4,7 @@
 #include <iostream>
 #include <list>
 #include "timer_thread.h"
+#include "mutex_lock.h"
 
 using namespace std;
 
@@ -43,7 +44,11 @@ private:
             if(ThreadMgr::_thread_mgr != NULL){
                 delete ThreadMgr::_thread_mgr;
                 ThreadMgr::_thread_mgr = NULL;
-            }                
+            }
+			//if(_mutex != NULL){
+			//	delete ThreadMgr::_mutex;
+			//	 ThreadMgr::_mutex = NULL;
+			//}
         }
     };
     static Garbo _garbo;
@@ -52,6 +57,8 @@ private:
     list<MonThread*> _thread_list;
     
     static ThreadMgr *_thread_mgr;
+
+	static MutexLock _mutex;
     
 };
 
