@@ -1,9 +1,11 @@
 vpath %.cpp ../src/util
+vpath %.cpp ../src/base
 vpath %.h ../src/include
+vpath %.h ../src/base
 
 CC = g++
-INCLUDES = -I../src/include -I../src/util
-OBJS = test_memory_manager.o memory_manager.o memory_list.o log.o
+INCLUDES = -I../src/include -I../src/util -I../src/base
+OBJS = test_memory_manager.o memory_manager.o memory_list.o log.o utility.o mutex_lock.o mutex_guard.o
 main:$(OBJS)
 	$(CC) -o $@ $^
 $(OBJS):%.o:%.cpp

@@ -11,7 +11,7 @@ public:
         int i = 0;
         while(i < 3){
             sleep(1);
-            Log::i("Task", _name.c_str());
+            LogDebug("Task");
             ++i;
         }        
     }
@@ -28,7 +28,7 @@ public:
         int i = 0;
         while(i < 3){
             sleep(2);
-            Log::i("Task", _name.c_str());
+            LogDebug("Task");
             ++i;
         }        
     }
@@ -39,7 +39,7 @@ private:
 
 
 int main(){
-    
+    LogInit();
     ThreadPool *tp = new ThreadPool("thead pool");
     tp->start(3);
     Runner *task1 = new MyTask("task 1");
@@ -60,17 +60,18 @@ int main(){
     sleep(5);
     tp->push_task(task4);
     sleep(6);
-    Log::i("main", "task in queue:%d", tp->tasks_in_queue());
+    LogDebug("task in queue:%d", tp->tasks_in_queue());
     tp->push_task(task5);
     tp->push_task(task6);
     //tp->push_task(task7);
 
-    Log::i("main", "task in queue:%d", tp->tasks_in_queue());
+    LogDebug("task in queue:%d", tp->tasks_in_queue());
 
     //sleep(30);
     tp->stop(); //释放资源会等待线程执行完毕，如果Runner类的svc方法是死循环，这里会导致线程挂死
     delete tp; 
-    Log::i("main", "end");
+    LogDebug("end");
+    LogFini();
     return 0;
 }
 

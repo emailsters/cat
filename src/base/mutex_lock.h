@@ -7,15 +7,15 @@ public:
     MutexLock();
     ~MutexLock();
 
-    void lock();
+    int  Lock();
 
-    void unlock();
+    int Unlock();
 
-    pthread_mutex_t *get_mutex();
+    pthread_mutex_t *GetMutex();
 
 private:
     MutexLock(const MutexLock &mutex_lock){}
-    MutexLock operator=(const MutexLock &mutex_lock){}
+    MutexLock& operator=(const MutexLock &mutex_lock){}
     
 private:
     pthread_mutex_t _mutex;

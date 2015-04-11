@@ -8,7 +8,7 @@
 inline void *operator new(size_t size, const char *file, unsigned int line){
     void *p = (void *)malloc(size);
     if(p == NULL){
-        Log::i("new", "allocate memory failed");
+        LogDebug("allocate memory failed");
         return NULL;
     }
     MemMgr *mem_mgr = MemManager::get_manager();

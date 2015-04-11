@@ -26,7 +26,7 @@ ThreadPool::~ThreadPool(){
 int ThreadPool::start(int thread_count){
     int succ_count = 0;
     if(thread_count > MAX_THREAD_COUNT){
-        Log::i(LOG_THREAD_POOL, "too much threads");
+        LogDebug("too much threads");
         return 0;
     }
     _running = true;    
@@ -43,14 +43,14 @@ int ThreadPool::start(int thread_count){
 
 void ThreadPool::stop(){
     {
-        MUTEX_GUARD_RETURN(&_mutex);
-        Log::i(LOG_THREAD_POOL, "stop thread pool");
+        MUTEX_GUARD(&_mutex);
+        LogDebug("stop thread pool");
         _running = false;
-        _condition.notify_all();
+        _condition.NotifyAll();
     }
     clear_threads();
     
-    Log::i(LOG_THREAD_POOL, "stop thread pool end");
+    LogDebug("stop thread pool end");
 }
 
 void ThreadPool::svc(){
@@ -66,19 +66,19 @@ void ThreadPool::svc(){
 }
 
 bool ThreadPool::push_task(Runner *task){
-    MUTEX_GUARD_RETURN(&_mutex);
+    MUTEX_GUARD(&_mutex);
     if(full()){
-        Log::i(LOG_THREAD_POOL, "task queue is full");
+        LogDebug("task queue is full");
         return false;
     }
     if(check_task(task)){
         _task_queue.push_back(task);
     }else{
-        Log::i(LOG_THREAD_POOL, "task is already running");
+        LogDebug("task is already running");
         return false;
     }
-    Log::i(LOG_THREAD_POOL, "push task, notify all");
-    _condition.notify_all();
+    LogDebug("push task, notify all");
+    _condition.NotifyAll();
     return true;
 }
 
@@ -94,14 +94,14 @@ bool ThreadPool::check_task(Runner *task){
 }
 
 Runner* ThreadPool::take(){
-    MUTEX_GUARD_RETURN(&_mutex);
+    MUTEX_GUARD(&_mutex);
     Runner *task = NULL;
     while(_task_queue.empty() && _running){
-        Log::i(LOG_THREAD_POOL, "queue is empty waiting");
-        _condition.wait();
+        LogDebug("queue is empty waiting");
+        _condition.Wait();
     }
     if(!_task_queue.empty()){
-        Log::i(LOG_THREAD_POOL, "take task");
+        LogDebug("take task");
         task = _task_queue.front();
         _task_queue.pop_front();
     }
@@ -110,7 +110,6 @@ Runner* ThreadPool::take(){
 
 /* task应该由外部进行释放
 void ThreadPool::clear_task_queue(){
-    //Log::i(LOG_THREAD_POOL, "task queue size:%d", _task_queue.size());
     while(!_task_queue.empty()){
         delete _task_queue.front();
         _task_queue.pop_front();

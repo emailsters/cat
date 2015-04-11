@@ -11,7 +11,7 @@ public:
     void svc(){
         while(1){
             sleep(2);
-            Log::i("MyRunner", "my runner is running");
+            LogDebug("my runner is running");
         }
     }
 };
@@ -21,7 +21,7 @@ public:
     void svc(){
         while(1){
             sleep(2);
-            Log::i("MyThread", "my thread is running");
+            LogDebug("my thread is running");
         }
     }
 };
@@ -30,7 +30,7 @@ class MyMonThread : public MonThread{
 public:
     void do_task(){
         sleep(1);
-        Log::i("MyMonThread", "doing task");
+        LogDebug("doing task");
     }
 };
 
@@ -51,14 +51,14 @@ int main(){
     delete thread;
     delete runner;
     */
-
+    LogInit();
     MyMonThread *thread1 = new MyMonThread;
     MyMonThread *thread2 = new MyMonThread;
     MyMonThread *thread3 = new MyMonThread;
     MyMonThread *thread4 = new MyMonThread;
     MyMonThread *thread5 = new MyMonThread;
     ThreadMgr *thread_mgr = ThreadMgr::instance();
-    Log::i("test_thread", "thread cout:%d", thread_mgr->thread_count());
+    LogDebug("thread cout:%d", thread_mgr->thread_count());
     
     thread1->start();
     thread2->start();
@@ -83,6 +83,7 @@ int main(){
     delete thread3;
     delete thread4;
     delete thread5;
+    LogFini();
     return 0;
 }
 

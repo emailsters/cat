@@ -8,11 +8,11 @@ public:
     explicit Condition(MutexLock *mutex_lock);
     ~Condition();
 
-    void wait();
+    int Wait();
 
-    void notify();
+    int Notify();
 
-    void notify_all();
+    int NotifyAll();
 private:
     MutexLock *_mutex_lock;
 

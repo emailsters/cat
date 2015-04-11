@@ -13,7 +13,7 @@ FLAGS = -lpthread
 
 OBJS = test_thread.o monitor_thread.o \
 thread.o thread_mgr.o \
-log.o timer_thread.o mutex_lock.o mutex_guard.o
+log.o timer_thread.o mutex_lock.o mutex_guard.o utility.o
 
 main:$(OBJS)
 	$(CC) -o $@ $^ -Wall $(FLAGS)

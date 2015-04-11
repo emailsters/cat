@@ -1,9 +1,11 @@
 vpath %.cpp ../src/util
+vpath %.cpp ../src/base
 vpath %.h ../src/util
+vpath %.h ../src/base
 
 CC = g++
-OBJS = test_log.o log.o
-INCLUDES = -I../src/util
+OBJS = test_log.o log.o utility.o mutex_lock.o mutex_guard.o
+INCLUDES = -I../src/util -I../src/base
 main:$(OBJS)
 	$(CC) -o $@ $^ -Wall
 $(OBJS):%.o:%.cpp

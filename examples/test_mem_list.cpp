@@ -2,6 +2,7 @@
 #include "log.h"
 
 int main(){
+    LogInit();
     MemList list;
     list.push((void *)1);
     list.push((void *)2);
@@ -14,23 +15,24 @@ int main(){
     list.push((void *)7);
     list.print();
     
-    Log::i("main", "list size:%d", list.size());
+    LogDebug("list size:%d", list.size());
     list.print();
     list.erase((void*)3);
-    Log::i("main", "list size:%d", list.size());
+    LogDebug("list size:%d", list.size());
     list.print();
 
     list.erase((void*)1);
-    Log::i("main", "list size:%d", list.size());
+    LogDebug("list size:%d", list.size());
     list.print();
 
     list.erase((void*)7);
-    Log::i("main", "list size:%d", list.size());
+    LogDebug("list size:%d", list.size());
     list.print();
 
     
     list.clear();
-    Log::i("main", "list size:%d", list.size());
+    LogDebug("list size:%d", list.size());
+    LogFini();
     return 0;
 }
 

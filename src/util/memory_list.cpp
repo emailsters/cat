@@ -39,18 +39,18 @@ void MemList::clear(){
 
 bool MemList::push(void *value){
     if(value == NULL){
-        Log::i(LOG_MEMLIST, "can not push NULL pointer");
+        LogDebug("can not push NULL pointer");
         return false;
     }
     int ret = find(value);
     if(ret != -1){
-        Log::i(LOG_MEMLIST, "failed to push, the memory is already in the list");
+        LogDebug("failed to push, the memory is already in the list");
         return false;
     }
     if(_head == NULL){
         _head = (mem_node_t*)malloc(sizeof(mem_node_t));
         if(_head == NULL){
-            Log::i(LOG_MEMLIST, "(%s, %u) allocate memory failed", 
+            LogDebug("(%s, %u) allocate memory failed", 
                 __FILE__, __LINE__);
             return false;
         }
@@ -64,7 +64,7 @@ bool MemList::push(void *value){
 
     mem_node_t *new_node = (mem_node_t*)malloc(sizeof(mem_node_t));
     if(new_node == NULL){
-        Log::i(LOG_MEMLIST, "(%s, %u) allocate memory failed", 
+        LogDebug("(%s, %u) allocate memory failed", 
                 __FILE__, __LINE__);
         return false;
     }
@@ -83,7 +83,7 @@ unsigned int MemList::size(){
 
 int MemList::find(void *value){
     if(value == NULL){
-        Log::i(LOG_MEMLIST, "parameter can not be NULL");
+        LogDebug("parameter can not be NULL");
         return -1;
     }
     int pos = 0;
@@ -103,7 +103,7 @@ int MemList::find(void *value){
 
 bool MemList::erase(void *value){
     if(_size == 0 || value == NULL){
-        Log::i(LOG_MEMLIST, "list or parameter is NULL, can not delete anything");
+        LogDebug("list or parameter is NULL, can not delete anything");
         return false;
     }
     mem_node_t *mem_node = _head;
@@ -134,7 +134,7 @@ bool MemList::erase(void *value){
         }
         mem_node = mem_node->next;
     }
-    Log::i(LOG_MEMLIST, "nothing to delete");
+    LogDebug("nothing to delete");
     return true;
 }
 

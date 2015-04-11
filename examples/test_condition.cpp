@@ -13,20 +13,20 @@ public:
 	~Task(){}
 
     void svc(){
-        MUTEX_GUARD_RETURN(&_mutex_lock);
-		Log::i("task", "sleep");
+        MUTEX_GUARD(&_mutex_lock);
+		LogDebug("sleep");
 		sleep(3);
-		Log::i("task", "sleep end");
-		Log::i("task", "thead wait");
-		_condition.wait();
-		Log::i("task", "wait end");
+		LogDebug("sleep end");
+		LogDebug("thead wait");
+		_condition.Wait();
+		LogDebug("wait end");
 		sleep(3);
-		Log::i("task", "hello world");
+		LogDebug("hello world");
     }
 	
 	void notify(){
-		MUTEX_GUARD_RETURN(&_mutex_lock);
-		_condition.notify_all();
+		MUTEX_GUARD(&_mutex_lock);
+		_condition.NotifyAll();
 	}
 private:
 	MutexLock _mutex_lock;
@@ -34,22 +34,23 @@ private:
 };
 
 int main(){
+	LogInit();
 	Task *runner = new Task;
 	Thread *thread1 = new Thread(runner);
 	Thread *thread2 = new Thread(runner);
 	thread1->start();
 	thread2->start();
-	Log::i("main", "start thread");
+	LogDebug("start thread");
 	sleep(10);
 
-	Log::i("main", "notify");
+	LogDebug("notify");
 	runner->notify();
 	//runner->notify();
 	sleep(3);
-	//Log::i("main", "notify");
 	
 	//sleep(3);
 	thread1->join();
 	thread2->join();
+	LogFini();
 	return 0;
 }

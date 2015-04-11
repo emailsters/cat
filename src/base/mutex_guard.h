@@ -13,7 +13,7 @@ private:
     MutexLock *_mutex_lock;
 };
 
-#define MUTEX_GUARD_RETURN(mutex) MutexGuard guard(mutex)
+#define MUTEX_GUARD(mutex) MutexGuard guard(mutex)
 
 #endif
 

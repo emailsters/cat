@@ -14,11 +14,11 @@ ThreadMgr::ThreadMgr(){
 
 ThreadMgr* ThreadMgr::instance()
 {
-	_mutex.lock();
+	_mutex.Lock();
     if(NULL == _thread_mgr){
         _thread_mgr = new ThreadMgr;
     }
-	_mutex.unlock();
+	_mutex.Unlock();
     return _thread_mgr;
 }
 
@@ -30,9 +30,9 @@ ThreadMgr::~ThreadMgr()
 
 int ThreadMgr::regist(MonThread *thread)
 {
-	_mutex.lock();
+	_mutex.Lock();
     _thread_list.push_back(thread);
-	_mutex.unlock();
+	_mutex.Unlock();
     return 0;
 }
 
@@ -47,28 +47,28 @@ int ThreadMgr::pop(MonThread *thread)
 */
 
 int ThreadMgr::unregist(MonThread *thread){
-	_mutex.lock();
+	_mutex.Lock();
     if(_thread_list.empty()){
-        Log::i(LOG_THREAD_MGR, "list is emtpy");
-		_mutex.unlock();
+        LogDebug("list is emtpy");
+		_mutex.Unlock();
         return false;
     }
     list<MonThread*>::iterator itor = _thread_list.begin();
     while(itor != _thread_list.end()){
         if((*itor) == thread){
             _thread_list.erase(itor);
-			_mutex.unlock();
+			_mutex.Unlock();
             return 0;
         }
         ++itor;
     }
-    Log::i(LOG_THREAD_MGR, "can not find thread");
-	_mutex.unlock();
+    LogDebug("can not find thread");
+	_mutex.Unlock();
     return -1;
 }
 
 void ThreadMgr::clear(){
-	_mutex.lock();
+	_mutex.Lock();
     std::list<MonThread*>::iterator itor = _thread_list.begin();
     while(itor != _thread_list.end()){
         (*itor)->stop();
@@ -76,7 +76,7 @@ void ThreadMgr::clear(){
         ++itor;
     }
     _thread_list.clear();
-	_mutex.unlock();
+	_mutex.Unlock();
 }
 
 void ThreadMgr::on_timer(){
@@ -84,11 +84,11 @@ void ThreadMgr::on_timer(){
 }
 
 void ThreadMgr::check_threads(){
-    Log::i(LOG_THREAD_MGR, "check threads");
+    LogDebug("check threads");
     std::list<MonThread*>::iterator itor = _thread_list.begin();
     while(itor != _thread_list.end()){
         if((*itor)->get_missed_hands() >= 5){
-            Log::i(LOG_THREAD_MGR, "thread %d is dead", (*itor)->get_thread_id());
+            LogDebug("thread %d is dead", (*itor)->get_thread_id());
         }else{
             (*itor)->shake(UNSHAKE);
         }
