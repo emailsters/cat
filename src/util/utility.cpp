@@ -66,20 +66,3 @@ int ParseCmdRet(int fd, list<string>& ret){
     return 0;
 }
 
-//int main(){
-//    string cmd = "/home/kewen/github/cat/cat/src/script/cmd.sh 3";
-//    string cmd2 = "ls -l";
-//    list<string> ret;
-//    int cret = 
-//        Util::System(cmd, ret);
-//    cout<<"cret:"<<cret<<",size:"<<ret.size()<<endl;
-//    list<string>::iterator itor = ret.begin();
-//    while(itor != ret.end()){
-//        cout<<*itor<<endl;
-//        ++itor;
-//    }
-//    return 0;
-//}
-
-
-
