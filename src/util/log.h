@@ -7,12 +7,13 @@ using namespace std;
 typedef enum LL{
     L_DEBUG,
     L_INFO,
-    L_ERROR
+    L_ERROR,
+    L_WARNING
 }LogLevel;
 
 #define LOG_FILE_NAME_DFT "cat.log"
 
-// year-mon-day hour-min-sec(DEBUG):helloworld.
+// year-mon-day hour-min-sec[DEBUG][business.cpp:1234]:helloworld.
 class Log{
 public:
     Log(string filename = LOG_FILE_NAME_DFT);
@@ -42,18 +43,23 @@ void LogFini();
 
 #define LogDebug(fmt, args...) \
     do { \
-        if(RawLog()) RawLog()->WriteLog(L_DEBUG, fmt, #args); \
+        if(RawLog()) RawLog()->WriteLog(L_DEBUG, "[%s:%u]:" fmt, __FILE__, __LINE__, #args); \
     }while(0)
     
 #define LogInfo(fmt, args...) \
     do { \
-        if(RawLog()) RawLog()->WriteLog(L_INFO, fmt, #args); \
+        if(RawLog()) RawLog()->WriteLog(L_INFO, "[%s:%u]:" fmt, __FILE__, __LINE__, #args); \
     }while(0)
 
 #define LogError(fmt, args...) \
     do { \
-        if(RawLog()) RawLog()->WriteLog(L_ERROR, fmt, #args); \
-    }while(0)   
+        if(RawLog()) RawLog()->WriteLog(L_ERROR, "[%s:%u]:" fmt, __FILE__, __LINE__, #args); \
+    }while(0)
+
+#define LogWarning(fmt, args...) \
+    do { \
+        if(RawLog()) RawLog()->WriteLog(L_WARNING, "[%s:%u]:" fmt, __FILE__, __LINE__, #args); \
+    }while(0)  
 
 #endif
 
