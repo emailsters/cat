@@ -2,7 +2,7 @@ CC = g++
 AR = ar
 FLAGS = -lpthread -L../bin -lcatbase -lcatutil -lcatlog -lcatthread -lcatmemory
 INCLUDES = -I../src/log -I../src/base -I../src/memory
-BIN = test_mem_lists
+BIN = test_mem_list
 
 OBJS = test_mem_list.o
 $(BIN):$(OBJS)
