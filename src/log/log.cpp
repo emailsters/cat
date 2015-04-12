@@ -13,6 +13,8 @@
 using namespace std;
 
 #define LOG_BUF_LEN (1024)
+
+//compress log file while reaches 3M
 #define LOG_FILE_LIMIT (3 * 1024 * 1024)
 
 const char* g_LogLevelInfo[] = {
@@ -72,7 +74,8 @@ int Log::FileSize(){
 void Log::CompressLogFile(){
     char time_buf[TIME_STR_LEN + 1];
     (void)strncpy(time_buf, g_LogBuf, TIME_STR_LEN - 1);
-
+    
+    //replace " " with "_"
     time_buf[10] = '_';
     time_buf[TIME_STR_LEN] = 0;
     string zfile = _filename + ".gz";
