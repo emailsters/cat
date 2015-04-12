@@ -1,5 +1,4 @@
 #include "condition.h"
-#include "log.h"
 
 #define LOG_CONDITION "Condition"
 
