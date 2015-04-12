@@ -1,16 +1,15 @@
-vpath %.cpp ../src/util
-vpath %.cpp ../src/base
-vpath %.h ../src/util
-vpath %.h ../src/base
-
 CC = g++
-INCLUDES = -I../src/util -I../src/base
-OBJS = test_mem_list.o memory_list.o log.o utility.o mutex_lock.o mutex_guard.o
-main:$(OBJS)
-	$(CC) -o $@ $^
+AR = ar
+FLAGS = -lpthread -L../bin -lcatbase -lcatutil -lcatlog -lcatthread -lcatmemory
+INCLUDES = -I../src/log -I../src/base -I../src/memory
+BIN = test_mem_lists
+
+OBJS = test_mem_list.o
+$(BIN):$(OBJS)
+	$(CC) -o $@ $^ $(FLAGS)
 
 $(OBJS):%.o:%.cpp
 	$(CC) -c $< -g $(INCLUDES) -D DEBUG
 .PHONY:clean
 clean:
-	-rm -f *.o main 
+	-rm -f *.o $(BIN) 

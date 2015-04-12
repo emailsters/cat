@@ -13,7 +13,7 @@ $(BIN):$(OBJS)
 	cp $(BIN) $(BIN_PATH)
 
 $(OBJS):%.o:%.cpp
-	$(CC) -g -c $< $(INCLUDES)	
+	$(CC) -g -c $< $(INCLUDES) -D DEBUG
 	
 .PHONY:clean
 clean:

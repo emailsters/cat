@@ -1,25 +1,16 @@
-vpath %.cpp ../src/thread
-vpath %.cpp ../src/base
-vpath %.cpp ../src/util
-vpath %.h ../src/thread
-vpath %.h ../src/base
-vpath %.h ../src/util
-vpath %.h ../src/include
-
-INCLUDES = -I../src/include/ -I../src/util/ -I../src/thread/ -I../src/base/
-
 CC = g++
-FLAGS = -lpthread
+AR = ar
+FLAGS = -lpthread -L../bin -lcatbase -lcatutil -lcatlog -lcatthread -lcatmemory
+INCLUDES = -I../src/log -I../src/base -I../src/memory -I../src/thread -I../src/include
+BIN = test_thread_pool
 
-OBJS = test_thread_pool.o  thread.o thread_pool.o log.o mutex_lock.o mutex_guard.o condition.o utility.o
-
-main:$(OBJS)
-	$(CC) -o $@ $^ -Wall $(FLAGS)
+OBJS = test_thread_pool.o
+$(BIN):$(OBJS)
+	$(CC) -o $@ $^ $(FLAGS)
 
 $(OBJS):%.o:%.cpp
-	$(CC) -g -c $< $(INCLUDES)	
-	
+	$(CC) -c $< -g $(INCLUDES) -D DEBUG
 .PHONY:clean
 clean:
-	-rm -f $(OBJS) main
+	-rm -f *.o $(BIN) 
 	
