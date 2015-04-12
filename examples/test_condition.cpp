@@ -51,6 +51,9 @@ int main(){
     //sleep(3);
     thread1->join();
     thread2->join();
+    delete runner;
+    delete thread1;
+    delete thread2;
     LogFini();
     return 0;
 }

@@ -72,6 +72,12 @@ int main(){
     delete tp; 
     LogDebug("end");
     LogFini();
+    delete task1;
+    delete task2;
+    delete task3;
+    delete task4;
+    delete task5;
+    delete task6;
     return 0;
 }
 
