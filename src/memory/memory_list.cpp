@@ -23,7 +23,7 @@ MemList::~MemList(){
 void MemList::clear(){
     mem_node_t *mem_node = _head;
     mem_node_t *d_node = NULL;
-    
+    int* a = new int; 
     //would not free outside memory
     while(mem_node){
         d_node = mem_node;

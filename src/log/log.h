@@ -43,22 +43,22 @@ void LogFini();
 
 #define LogDebug(fmt, args...) \
     do { \
-        if(RawLog()) RawLog()->WriteLog(L_DEBUG, "[%s:%u]:" fmt, __FILE__, __LINE__, #args); \
+        if(RawLog()) RawLog()->WriteLog(L_DEBUG, "[%s:%u]:" fmt, __FILE__, __LINE__, ##args); \
     }while(0)
     
 #define LogInfo(fmt, args...) \
     do { \
-        if(RawLog()) RawLog()->WriteLog(L_INFO, "[%s:%u]:" fmt, __FILE__, __LINE__, #args); \
+        if(RawLog()) RawLog()->WriteLog(L_INFO, "[%s:%u]:" fmt, __FILE__, __LINE__, ##args); \
     }while(0)
 
 #define LogError(fmt, args...) \
     do { \
-        if(RawLog()) RawLog()->WriteLog(L_ERROR, "[%s:%u]:" fmt, __FILE__, __LINE__, #args); \
+        if(RawLog()) RawLog()->WriteLog(L_ERROR, "[%s:%u]:" fmt, __FILE__, __LINE__, ##args); \
     }while(0)
 
 #define LogWarning(fmt, args...) \
     do { \
-        if(RawLog()) RawLog()->WriteLog(L_WARNING, "[%s:%u]:" fmt, __FILE__, __LINE__, #args); \
+        if(RawLog()) RawLog()->WriteLog(L_WARNING, "[%s:%u]:" fmt, __FILE__, __LINE__, ##args); \
     }while(0)  
 
 #endif
